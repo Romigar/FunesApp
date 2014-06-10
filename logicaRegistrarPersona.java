@@ -53,7 +53,7 @@ public class logicaRegistrarPersona {
 	}
 
         public static void registrarInstitucionCargo(String cargo, String institucion, String cedulaPersona){
-                String idInstitucion, idCargo;
+                String idInstitucion, idCargo, idPersona;
                 try{
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/Funes?"+"user=usuario&password=pass");
@@ -69,11 +69,18 @@ public class logicaRegistrarPersona {
                         rs.next();
                         idCargo=rs.getString("idCargo");
                         
-                        pstat = (PreparedStatement) connection.prepareStatement("CALL insertarInstitucionLabora(?,?,?,?)");
-                        pstat.setString(1,idInstitucion);
-                        pstat.setString(2,null);
+                        pstat = (PreparedStatement) connection.prepareStatement("CALL Id_Persona(?)");
+                        pstat.setString(1,cedulaPersona);
+                        rs=pstat.executeQuery();
+                        rs.next();
+                        idPersona=rs.getString("idPersonaFisica");
+                        
+                        pstat = (PreparedStatement) connection.prepareStatement("CALL insertarInstitucionLabora(?,?,?,?,?)");
+                        pstat.setString(1,idPersona);
+                        pstat.setString(2,idInstitucion);
                         pstat.setString(3,null);
-                        pstat.setString(4,idCargo);
+                        pstat.setString(4,null);
+                        pstat.setString(5,idCargo);
                         pstat.executeQuery();
                         		
 		}
